@@ -1,0 +1,1 @@
+cmd /k mvnw clean install -DskipTests
