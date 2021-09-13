@@ -30,7 +30,7 @@ public class MaterialDTO implements Serializable {
     private String link;
 
 
-    private MaterialTypeDTO type;
+    private Long typeId;
     private Set<RoomDTO> rooms = new HashSet<>();
 
     public Long getId() {
@@ -89,12 +89,12 @@ public class MaterialDTO implements Serializable {
         this.link = link;
     }
 
-    public MaterialTypeDTO getType() {
-        return type;
+    public Long getTypeId() {
+        return typeId;
     }
 
-    public void setType(MaterialTypeDTO type) {
-        this.type = type;
+    public void setTypeId(Long materialTypeId) {
+        this.typeId = materialTypeId;
     }
 
     public Set<RoomDTO> getRooms() {
@@ -133,7 +133,7 @@ public class MaterialDTO implements Serializable {
             ", price=" + getPrice() +
             ", quantity=" + getQuantity() +
             ", link='" + getLink() + "'" +
-            ", typeId=" + getType() +
+            ", typeId=" + getTypeId() +
             ", rooms='" + getRooms() + "'" +
             "}";
     }
