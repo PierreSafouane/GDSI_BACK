@@ -18,7 +18,7 @@ import java.util.Set;
 @Entity
 @Table(name = "booking")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Booking implements Serializable {
+public class Booking extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
