@@ -1,5 +1,6 @@
 package fr.insy2s.repository;
 
+import fr.insy2s.domain.AbstractAuditingEntity;
 import fr.insy2s.domain.User;
 
 import org.springframework.cache.annotation.Cacheable;
