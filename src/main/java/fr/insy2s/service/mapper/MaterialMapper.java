@@ -12,11 +12,10 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {MaterialTypeMapper.class, RoomMapper.class})
 public interface MaterialMapper extends EntityMapper<MaterialDTO, Material> {
 
-    @Mapping(source = "type.id", target = "typeId")
+
     MaterialDTO toDto(Material material);
 
-    @Mapping(source = "typeId", target = "type")
-    @Mapping(target = "removeRooms", ignore = true)
+    
     Material toEntity(MaterialDTO materialDTO);
 
     default Material fromId(Long id) {

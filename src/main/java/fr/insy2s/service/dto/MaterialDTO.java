@@ -9,7 +9,7 @@ import java.util.Set;
  * A DTO for the {@link fr.insy2s.domain.Material} entity.
  */
 public class MaterialDTO implements Serializable {
-    
+
     private Long id;
 
     private String imageUrl;
@@ -30,9 +30,9 @@ public class MaterialDTO implements Serializable {
     private String link;
 
 
-    private Long typeId;
+    private MaterialTypeDTO type;
     private Set<RoomDTO> rooms = new HashSet<>();
-    
+
     public Long getId() {
         return id;
     }
@@ -89,12 +89,12 @@ public class MaterialDTO implements Serializable {
         this.link = link;
     }
 
-    public Long getTypeId() {
-        return typeId;
+    public MaterialTypeDTO getType() {
+        return type;
     }
 
-    public void setTypeId(Long materialTypeId) {
-        this.typeId = materialTypeId;
+    public void setType(MaterialTypeDTO type) {
+        this.type = type;
     }
 
     public Set<RoomDTO> getRooms() {
@@ -133,7 +133,7 @@ public class MaterialDTO implements Serializable {
             ", price=" + getPrice() +
             ", quantity=" + getQuantity() +
             ", link='" + getLink() + "'" +
-            ", typeId=" + getTypeId() +
+            ", typeId=" + getType() +
             ", rooms='" + getRooms() + "'" +
             "}";
     }
