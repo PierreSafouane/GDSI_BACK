@@ -1,0 +1,38 @@
+{
+  "name": "Presence",
+  "fields": [
+    {
+      "fieldName": "isAttending",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "presence",
+      "relationshipValidateRules": "required",
+      "relationshipName": "appUser",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "booking",
+      "otherEntityRelationshipName": "presences",
+      "relationshipValidateRules": "required",
+      "relationshipName": "booking",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20210913074312",
+  "entityTableName": "presence",
+  "dto": "mapstruct",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

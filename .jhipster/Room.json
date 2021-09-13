@@ -1,0 +1,42 @@
+{
+  "name": "Room",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "maxCapacity",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "roomImage",
+      "otherEntityRelationshipName": "room",
+      "relationshipName": "images"
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "material",
+      "otherEntityRelationshipName": "rooms",
+      "relationshipName": "materials",
+      "otherEntityField": "id",
+      "ownerSide": false
+    }
+  ],
+  "changelogDate": "20210913074112",
+  "entityTableName": "room",
+  "dto": "mapstruct",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}
