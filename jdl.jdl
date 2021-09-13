@@ -1,0 +1,67 @@
+/**
+* Extends AbstractAuditingEntity
+*/
+entity Booking{
+    title String required
+    description String maxlength(1000)
+    startAt Instant required
+    finishAt Instant required
+}
+
+entity Material{
+  imageUrl String // ou lien Amazone
+  name String required
+  description String maxlength(1000)  //texterea
+  price Double min(0)
+  quantity Integer required min(1)
+  link String
+}
+
+entity MaterialRequest{
+  dateRequest Instant required
+  validated Boolean
+  quantityRequested Integer required min(1)
+}
+
+entity MaterialType{
+  code String required unique
+  label String required unique
+}
+
+entity Room{
+  name String required
+  maxCapacity Integer required
+}
+
+entity RoomImage{
+  imageRoom ImageBlob
+  imagePath String
+}
+
+entity Presence{
+  isAttending Boolean 
+}
+
+relationship ManyToOne{
+  Booking{room required} to Room
+  Presence{appUser required} to User
+  MaterialRequest{user required} to User
+  MaterialRequest{material required} to Material
+  Material{type} to MaterialType
+}
+
+relationship OneToMany {
+  Booking{presences} to Presence{booking required}
+  Room{images} to RoomImage{room required}
+}
+
+relationship ManyToMany{
+  Material{rooms} to Room{materials}
+}
+
+
+dto * with mapstruct
+service * with serviceImpl
+
+paginate Material, MaterialRequest, Booking with pagination
+filter Material, MaterialRequest, Booking
