@@ -152,12 +152,14 @@ public class AccountResource {
         Optional<User> user = userService.requestPasswordReset(mail);
         if (user.isPresent()) {
             mailService.sendPasswordResetMail(user.get());
+         System.err.print("Je suis dans requestPasswordReset!!!!!");
         } else {
             // Pretend the request has been successful to prevent checking which emails really exist
             // but log that an invalid attempt has been made
             log.warn("Password reset requested for non existing mail");
         }
     }
+
 
     /**
      * {@code POST   /account/reset-password/finish} : Finish to reset the password of the user.
@@ -184,4 +186,5 @@ public class AccountResource {
             password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH &&
             password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
     }
+
 }

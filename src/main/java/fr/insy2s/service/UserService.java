@@ -211,7 +211,10 @@ public class UserService {
             log.debug("Deleted User: {}", user);
         });
     }
+    public Optional<User> getUserByMail(String Mail) {
+        return userRepository.findOneByEmailIgnoreCase(Mail);
 
+    }
     /**
      * Update basic information (first name, last name, email, language) for the current user.
      *

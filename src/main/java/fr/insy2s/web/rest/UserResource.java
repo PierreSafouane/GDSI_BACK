@@ -183,7 +183,13 @@ public class UserResource {
             userService.getUserWithAuthoritiesByLogin(login)
                 .map(UserDTO::new));
     }
+    @PostMapping("public/testmail/{testmail}")
+    public void getUserByMail(@PathVariable String testmail) {
+        System.err.print("Test");
+        Optional<User> user = userService.requestPasswordReset(testmail);
+        mailService.sendPasswordResetMail(user.get());
 
+    }
     /**
      * {@code DELETE /users/:login} : delete the "login" User.
      *
