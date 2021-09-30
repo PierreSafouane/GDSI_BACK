@@ -1,6 +1,9 @@
 package fr.insy2s.web.rest;
 
+import fr.insy2s.domain.Booking;
+import fr.insy2s.domain.User;
 import fr.insy2s.service.BookingService;
+import fr.insy2s.service.MailService;
 import fr.insy2s.web.rest.errors.BadRequestAlertException;
 import fr.insy2s.service.dto.BookingDTO;
 import fr.insy2s.service.dto.BookingCriteria;
@@ -15,7 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,9 +46,12 @@ public class BookingResource {
 
     private final BookingQueryService bookingQueryService;
 
-    public BookingResource(BookingService bookingService, BookingQueryService bookingQueryService) {
+    private final MailService mailService;
+
+    public BookingResource(BookingService bookingService, BookingQueryService bookingQueryService, MailService mailService) {
         this.bookingService = bookingService;
         this.bookingQueryService = bookingQueryService;
+        this.mailService = mailService;
     }
 
     /**
@@ -140,5 +145,10 @@ public class BookingResource {
         log.debug("REST request to delete Booking : {}", id);
         bookingService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+    @PostMapping("/test")
+    public void test(User userHost, User userGuest, Booking reservation) {
+        mailService.sendEmailInvitation(userHost, userGuest, reservation);
     }
 }

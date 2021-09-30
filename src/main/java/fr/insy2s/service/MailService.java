@@ -1,5 +1,6 @@
 package fr.insy2s.service;
 
+import fr.insy2s.domain.Booking;
 import fr.insy2s.domain.User;
 
 import io.github.jhipster.config.JHipsterProperties;
@@ -33,6 +34,12 @@ public class MailService {
     private static final String USER = "user";
 
     private static final String BASE_URL = "baseUrl";
+
+    private static final String USERHOST = "userHost";
+
+    private static final String USERGUEST = "userGuest";
+
+    private static final String BOOKING = "booking";
 
     private final JHipsterProperties jHipsterProperties;
 
@@ -102,5 +109,22 @@ public class MailService {
     public void sendPasswordResetMail(User user) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
+    }
+
+    @Async
+    public void sendEmailInvitation(User userHost, User userGuest, Booking reservation) {
+        if (userGuest.getEmail() == null) {
+            log.debug("Email doesn't exist for user '{}'", userGuest.getLogin());
+            return;
+        }
+        Locale locale = Locale.forLanguageTag(userGuest.getLangKey());
+        Context context = new Context(locale);
+        context.setVariable(USERHOST, userHost);
+        context.setVariable(USERGUEST, userGuest);
+        context.setVariable(BOOKING, reservation);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        String content = templateEngine.process("mail/InvitationEmail", context);
+        String subject = messageSource.getMessage("email.invitation.title", null, locale);
+        sendEmail(userGuest.getEmail(), subject, content, false, true);
     }
 }

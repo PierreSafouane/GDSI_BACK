@@ -1,11 +1,11 @@
-id;image_url;name;description;price;quantity;link
-1;https://discord.com/channels/@me/877530295727968319/886896445804933170;stylo;stylo de bonne qualité;5;1.50;redefine
-2;https://discord.com/channels/@me/877530295727968319/886896589120098334;stabilo;pour surligner;5;3.00;SCSI
-3;https://discord.com/channels/@me/877530295727968319/886896809811804180;ballais;le baleyator 3000 pour eliminé 99,99% des poussieres;1;3.54;copy Licensed Granite Fish
-4;https://discord.com/channels/@me/877530295727968319/886896994495389727;projecteur;pour voir des films;1;1999.99;Ohio Checking Account
-5;https://discord.com/channels/@me/877530295727968319/886897400210423878;brosse pour tableau a craie;a l'ancienne;1;0.50;Quality Orchestrator Officer
-6;https://discord.com/channels/@me/877530295727968319/886897883541028904;Ordinateur portable;e-services sky blue;1;1023.57;Awesome Fresh Keyboard
-7;https://discord.com/channels/@me/877530295727968319/886897746450198589;corbeille essonne;pensez a faire le tri;1;5.32;sky blue payment SAS
-8;https://discord.com/channels/@me/877530295727968319/886897905615654942;bureau en bois de chêne;Future;1;254.99;applications exploit
-9;https://discord.com/channels/@me/877530295727968319/886898094275457045;papier toilette;avec sudoku pour decompresser;12;2.35;capacitor Alabama
-10;https://discord.com/channels/@me/877530295727968319/886898768841162772;dosette pour café;100% pour arabica;50;4.87;Sausages back-end
+id;image_url;name;description;price;quantity;link;created_by
+1;https://discord.com/channels/@me/877530295727968319/886896445804933170;stylo;stylo de bonne qualité;5;1.50;redefine;1
+2;https://discord.com/channels/@me/877530295727968319/886896589120098334;stabilo;pour surligner;5;3.00;SCSI;1
+3;https://discord.com/channels/@me/877530295727968319/886896809811804180;ballais;le baleyator 3000 pour eliminé 99,99% des poussieres;1;3.54;copy Licensed Granite Fish;1
+4;https://discord.com/channels/@me/877530295727968319/886896994495389727;projecteur;pour voir des films;1;1999.99;Ohio Checking Account;1
+5;https://discord.com/channels/@me/877530295727968319/886897400210423878;brosse pour tableau a craie;a l'ancienne;1;0.50;Quality Orchestrator Officer;1
+6;https://discord.com/channels/@me/877530295727968319/886897883541028904;Ordinateur portable;e-services sky blue;1;1023.57;Awesome Fresh Keyboard;1
+7;https://discord.com/channels/@me/877530295727968319/886897746450198589;corbeille essonne;pensez a faire le tri;1;5.32;sky blue payment SAS;1
+8;https://discord.com/channels/@me/877530295727968319/886897905615654942;bureau en bois de chêne;Future;1;254.99;applications exploit;1
+9;https://discord.com/channels/@me/877530295727968319/886898094275457045;papier toilette;avec sudoku pour decompresser;12;2.35;capacitor Alabama;1
+10;https://discord.com/channels/@me/877530295727968319/886898768841162772;dosette pour café;100% pour arabica;50;4.87;Sausages back-end;1

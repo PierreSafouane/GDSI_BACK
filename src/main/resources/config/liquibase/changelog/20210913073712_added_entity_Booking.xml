@@ -70,6 +70,7 @@
             <column name="start_at" type="datetime"/>
             <column name="finish_at" type="datetime"/>
             <column name="room_id" type="numeric"/>
+            <column name="created_by" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>
