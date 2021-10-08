@@ -304,4 +304,12 @@ public class UserService {
             Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
         }
     }
+
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findOneById(id);
+    }
+
+    public  List<User> findUsersByIdBooking(List<Long> id) {
+        return userRepository.findUserByIdIn(id);
+    }
 }

@@ -9,8 +9,12 @@
         <p th:text="#{email.invitation.greeting(${userGuest.login})}">
             Dear
         </p>
-        <p th:text="#{email.invitation.text1(${userHost.login},${booking.title},${booking.startAt},${booking.startAt},${booking.finishAt},${booking.room})}">
+        <p th:text="#{email.invitation.text1(${userHost.login},${booking.title},${day},${startAt},${finishAt},${booking.roomId})}">
             Your JHipster account has been created, please click on the URL below to activate it:
+        </p>
+        <p>
+                <a th:with="url=(@{|${baseUrl}/attending?isAttending=true&userLogin=${userGuest.login}|})" th:href="${url}" target="_blank" th:text="Accepter">Accepter</a>
+                <a th:with="url=(@{|${baseUrl}/attending?isAttending=false&userLogin=${userGuest.login}|})" th:href="${url}" target="_blank" th:text="Refuser">Refuser</a>
         </p>
         <p>
             <span th:text="#{email.invitation.text2}">Regards, </span>

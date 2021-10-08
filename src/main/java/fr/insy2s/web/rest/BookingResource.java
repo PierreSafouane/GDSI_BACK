@@ -1,14 +1,16 @@
 package fr.insy2s.web.rest;
 
-import fr.insy2s.domain.Booking;
 import fr.insy2s.domain.User;
 import fr.insy2s.service.BookingService;
 import fr.insy2s.service.MailService;
+import fr.insy2s.service.UserService;
 import fr.insy2s.web.rest.errors.BadRequestAlertException;
 import fr.insy2s.service.dto.BookingDTO;
 import fr.insy2s.service.dto.BookingCriteria;
 import fr.insy2s.service.BookingQueryService;
 
+import fr.insy2s.web.rest.vm.ManageBookingEmailVM;
+import fr.insy2s.web.rest.vm.ManageBookingVM;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -48,26 +50,33 @@ public class BookingResource {
 
     private final MailService mailService;
 
-    public BookingResource(BookingService bookingService, BookingQueryService bookingQueryService, MailService mailService) {
+    private final UserService userService;
+
+    public BookingResource(BookingService bookingService, BookingQueryService bookingQueryService, MailService mailService, UserService userService) {
         this.bookingService = bookingService;
         this.bookingQueryService = bookingQueryService;
         this.mailService = mailService;
+        this.userService = userService;
     }
 
     /**
      * {@code POST  /bookings} : Create a new booking.
      *
-     * @param bookingDTO the bookingDTO to create.
+     * @param manageBookingVM the bookingDTO to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new bookingDTO, or with status {@code 400 (Bad Request)} if the booking has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/bookings")
-    public ResponseEntity<BookingDTO> createBooking(@Valid @RequestBody BookingDTO bookingDTO) throws URISyntaxException {
-        log.debug("REST request to save Booking : {}", bookingDTO);
-        if (bookingDTO.getId() != null) {
+    public ResponseEntity<BookingDTO> createBooking(@Valid @RequestBody ManageBookingVM manageBookingVM) throws URISyntaxException {
+        log.debug("REST request to save Booking : {}", manageBookingVM);
+        if (manageBookingVM.getBookingDTO().getId() != null) {
             throw new BadRequestAlertException("A new booking cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        BookingDTO result = bookingService.save(bookingDTO);
+        BookingDTO result = bookingService.save(manageBookingVM.getBookingDTO());
+
+        ManageBookingEmailVM manageBookingEmailVM = new ManageBookingEmailVM(manageBookingVM.getUserHostId(), manageBookingVM.getUsersGuestIds(), manageBookingVM.getBookingDTO().getId());
+        sendMailToBookedUsers(manageBookingVM);
+
         return ResponseEntity.created(new URI("/api/bookings/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -147,8 +156,18 @@ public class BookingResource {
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 
-    @PostMapping("/test")
-    public void test(User userHost, User userGuest, Booking reservation) {
-        mailService.sendEmailInvitation(userHost, userGuest, reservation);
+
+    /**
+     * methode d'envoi de mail aux users invité a une booking, (se lance grace a la requette PostMapping de booking)
+     * @param manageBookingEmailVM
+     */
+    @PostMapping("/bookings/mail")
+    public void sendMailToBookedUsers(@RequestBody ManageBookingVM manageBookingEmailVM) {
+        Optional<User> userHost = userService.getUserById(manageBookingEmailVM.getUserHostId());
+        Optional<BookingDTO> reservation = bookingService.findOne(manageBookingEmailVM.getBookingDTO().getId());
+        for (int i = 0; i < manageBookingEmailVM.getUsersGuestIds().size(); i++) {
+            Optional<User> userGuest = userService.getUserById(manageBookingEmailVM.getUsersGuestIds().get(i));
+            mailService.sendEmailInvitation(userHost.get(), userGuest.get(), reservation.get());
+        }
     }
 }
