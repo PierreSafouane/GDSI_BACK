@@ -1,6 +1,7 @@
 package fr.insy2s.web.rest;
 
 import fr.insy2s.domain.Booking;
+import fr.insy2s.domain.Presence;
 import fr.insy2s.domain.User;
 import fr.insy2s.service.PresenceService;
 import fr.insy2s.service.dto.BookingDTO;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -133,7 +135,34 @@ public class PresenceResource {
      *
      */
     @GetMapping("/presences/bookingbyuser/{id}")
-    public List<BookingDTO> presenceByUser(@PathVariable Long id) {
+    public List<BookingDTO> bookingByUser(@PathVariable Long id) {
         return presenceService.findBookingByUser(id);
+    }
+    /**
+     * recuperation des presences pour tel user
+     *
+     */
+    @GetMapping("/presences/presencebyuser/{id}")
+    public List<Presence> presenceByUser(@PathVariable Long id) {
+        return presenceService.findByAppUser(id);
+    }
+
+    /**
+     * recuperation des presences pour tel user avant la date actuelle
+     *
+     */
+    @GetMapping("/presences/presenceByUserBeforeDate/{id}")
+    public List<Presence> presenceByUserBeforeDate(@PathVariable Long id) {
+        Instant actDate = Instant.now();
+        return presenceService.findByAppUserBeforeStartDate(id,actDate);
+    }
+    /**
+     * recuperation des presences pour tel user après la date actuelle
+     *
+     */
+    @GetMapping("/presences/presenceByUserAfterDate/{id}")
+    public List<Presence> presenceByUserAfterDate(@PathVariable Long id) {
+        Instant actDate = Instant.now();
+        return presenceService.findByAppUserAfterEndDate(id,actDate);
     }
 }

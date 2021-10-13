@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -97,6 +98,29 @@ public class PresenceServiceImpl implements PresenceService {
         return bookingService.findBookingsByIdUser(bookingsIds).stream()
             .map(bookingMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    @Override
+    public List<Presence> findByAppUser(Long id) {
+        log.debug("Request to get presence by user in Presence table");
+        List<Presence> presences = presenceRepository.findByAppUserId(id);
+
+        return presences;
+    }
+
+    @Override
+    public List<Presence> findByAppUserBeforeStartDate(Long id , Instant startDate) {
+        log.debug("Request to get presence by user in Presence table");
+        List<Presence> presences = presenceRepository.findByAppUserIdAndBookingStartAtBefore(id,startDate);
+
+        return presences;
+    }
+
+    @Override
+    public List<Presence> findByAppUserAfterEndDate(Long id , Instant startDate) {
+        log.debug("Request to get presence by user in Presence table");
+        List<Presence> presences = presenceRepository.findByAppUserIdAndBookingFinishAtAfter(id,startDate);
+        return presences;
     }
 
     @Override

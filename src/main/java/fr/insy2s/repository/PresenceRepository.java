@@ -7,6 +7,7 @@ import fr.insy2s.domain.User;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -22,4 +23,7 @@ public interface PresenceRepository extends JpaRepository<Presence, Long> {
     List<Presence> findByBookingId(Long id);
 
     List<Presence> findByAppUserId(Long id);
+
+    List<Presence> findByAppUserIdAndBookingStartAtBefore(Long id, Instant startDate);
+    List<Presence> findByAppUserIdAndBookingFinishAtAfter(Long id, Instant startDate);
 }
