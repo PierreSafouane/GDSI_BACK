@@ -7,16 +7,15 @@ import java.io.Serializable;
  * A DTO for the {@link fr.insy2s.domain.Presence} entity.
  */
 public class PresenceDTO implements Serializable {
-    
+
     private Long id;
 
     private Boolean isAttending;
 
-
     private Long appUserId;
 
     private Long bookingId;
-    
+
     public Long getId() {
         return id;
     }

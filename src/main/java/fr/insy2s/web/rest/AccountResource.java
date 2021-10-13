@@ -187,4 +187,11 @@ public class AccountResource {
             password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
     }
 
+    @GetMapping("/account/unlogged")
+    public UserDTO getAccountWithKey(@RequestParam Long id) {
+        return userRepository.findOneById(id)
+            .map(UserDTO::new)
+            .orElseThrow(() -> new AccountResourceException("User could not be found"));
+    }
+
 }

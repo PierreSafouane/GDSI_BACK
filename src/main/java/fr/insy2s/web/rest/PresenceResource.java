@@ -122,7 +122,7 @@ public class PresenceResource {
     }
 
     /**
-     * recuperation des bookings pour tel user
+     * recuperation des users pour tel booking
      *
      */
     @GetMapping("/presences/userbybooking/{id}")
@@ -131,7 +131,7 @@ public class PresenceResource {
     }
 
     /**
-     * recuperation des users pour tel booking
+     * recuperation des bookings pour tel user
      *
      */
     @GetMapping("/presences/bookingbyuser/{id}")
