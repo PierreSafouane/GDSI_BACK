@@ -50,6 +50,8 @@ public class MailService {
 
     private static final String BOOKING_END = "finishAt";
 
+    private static final String PRESENCE_ID = "presenceId";
+
     private final JHipsterProperties jHipsterProperties;
 
     private final JavaMailSender javaMailSender;
@@ -121,7 +123,7 @@ public class MailService {
     }
 
     @Async
-    public void sendEmailInvitation(User userHost, User userGuest, BookingDTO reservation) {
+    public void sendEmailInvitation(User userHost, User userGuest, BookingDTO reservation, Long presenceId) {
         if (userGuest.getEmail() == null) {
             log.debug("Email doesn't exist for user '{}'", userGuest.getLogin());
             return;
@@ -143,6 +145,7 @@ public class MailService {
         context.setVariable(BOOKING_START, startHour);
         context.setVariable(BOOKING_END, finishHour);
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        context.setVariable(PRESENCE_ID, presenceId);
         String content = templateEngine.process("mail/InvitationEmail", context);
         String subject = messageSource.getMessage("email.invitation.title", null, locale);
         sendEmail(userGuest.getEmail(), subject, content, false, true);

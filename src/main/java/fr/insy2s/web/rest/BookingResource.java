@@ -1,13 +1,11 @@
 package fr.insy2s.web.rest;
 
 import fr.insy2s.domain.User;
-import fr.insy2s.service.BookingService;
-import fr.insy2s.service.MailService;
-import fr.insy2s.service.UserService;
+import fr.insy2s.service.*;
+import fr.insy2s.service.dto.PresenceDTO;
 import fr.insy2s.web.rest.errors.BadRequestAlertException;
 import fr.insy2s.service.dto.BookingDTO;
 import fr.insy2s.service.dto.BookingCriteria;
-import fr.insy2s.service.BookingQueryService;
 
 import fr.insy2s.web.rest.vm.ManageBookingEmailVM;
 import fr.insy2s.web.rest.vm.ManageBookingVM;
@@ -52,11 +50,14 @@ public class BookingResource {
 
     private final UserService userService;
 
-    public BookingResource(BookingService bookingService, BookingQueryService bookingQueryService, MailService mailService, UserService userService) {
+    private  final PresenceService presenceService;
+
+    public BookingResource(BookingService bookingService, BookingQueryService bookingQueryService, MailService mailService, UserService userService, PresenceService presenceService) {
         this.bookingService = bookingService;
         this.bookingQueryService = bookingQueryService;
         this.mailService = mailService;
         this.userService = userService;
+        this.presenceService = presenceService;
     }
 
     /**
@@ -72,10 +73,22 @@ public class BookingResource {
         if (manageBookingVM.getBookingDTO().getId() != null) {
             throw new BadRequestAlertException("A new booking cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        BookingDTO result = bookingService.save(manageBookingVM.getBookingDTO());
 
-        ManageBookingEmailVM manageBookingEmailVM = new ManageBookingEmailVM(manageBookingVM.getUserHostId(), manageBookingVM.getUsersGuestIds(), manageBookingVM.getBookingDTO().getId());
-        sendMailToBookedUsers(manageBookingVM);
+        BookingDTO result = bookingService.save(manageBookingVM.getBookingDTO());
+        PresenceDTO resultPresence = new PresenceDTO();
+
+        for (int i = 0; i < manageBookingVM.getUsersGuestIds().size() ; i++) {
+            PresenceDTO presenceDTO = new PresenceDTO();
+            presenceDTO.setBookingId(result.getId());
+            presenceDTO.setAppUserId(manageBookingVM.getUsersGuestIds().get(i));
+            System.out.println("presence bookingId : "+presenceDTO.getBookingId()+", presence userId : "+presenceDTO.getAppUserId()+", presence boolean : "+presenceDTO.isIsAttending());
+            resultPresence = presenceService.save(presenceDTO);
+        }
+
+        System.out.println("result presence after loop : "+resultPresence.getId());
+
+        ManageBookingEmailVM manageBookingEmailVM = new ManageBookingEmailVM(manageBookingVM.getUserHostId(), manageBookingVM.getUsersGuestIds(), result.getId(), resultPresence.getId());
+        sendMailToBookedUsers(manageBookingEmailVM);
 
         return ResponseEntity.created(new URI("/api/bookings/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -162,12 +175,13 @@ public class BookingResource {
      * @param manageBookingEmailVM
      */
     @PostMapping("/bookings/mail")
-    public void sendMailToBookedUsers(@RequestBody ManageBookingVM manageBookingEmailVM) {
+    public void sendMailToBookedUsers(@RequestBody ManageBookingEmailVM manageBookingEmailVM) {
+        System.out.println(manageBookingEmailVM.getReservationId());
         Optional<User> userHost = userService.getUserById(manageBookingEmailVM.getUserHostId());
-        Optional<BookingDTO> reservation = bookingService.findOne(manageBookingEmailVM.getBookingDTO().getId());
+        Optional<BookingDTO> reservation = bookingService.findOne(manageBookingEmailVM.getReservationId());
         for (int i = 0; i < manageBookingEmailVM.getUsersGuestIds().size(); i++) {
             Optional<User> userGuest = userService.getUserById(manageBookingEmailVM.getUsersGuestIds().get(i));
-            mailService.sendEmailInvitation(userHost.get(), userGuest.get(), reservation.get());
+            mailService.sendEmailInvitation(userHost.get(), userGuest.get(), reservation.get(), manageBookingEmailVM.getPresenceId());
         }
     }
 }

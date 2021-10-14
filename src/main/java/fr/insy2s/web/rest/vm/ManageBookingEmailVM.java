@@ -12,13 +12,16 @@ public class ManageBookingEmailVM {
 
     private Long reservationId;
 
+    private Long presenceId;
+
     public ManageBookingEmailVM() {
     }
 
-    public ManageBookingEmailVM(Long userHostId, List<Long> usersGuestIds, Long reservationId) {
+    public ManageBookingEmailVM(Long userHostId, List<Long> usersGuestIds, Long reservationId, Long presenceId) {
         this.userHostId=userHostId;
         this.usersGuestIds=usersGuestIds;
         this.reservationId=reservationId;
+        this.presenceId=presenceId;
     }
 
     public Long getUserHostId() {
@@ -43,5 +46,13 @@ public class ManageBookingEmailVM {
 
     public void setReservationId(Long reservationId) {
         this.reservationId = reservationId;
+    }
+
+    public Long getPresenceId() {
+        return presenceId;
+    }
+
+    public void setPresenceId(Long presenceId) {
+        this.presenceId = presenceId;
     }
 }

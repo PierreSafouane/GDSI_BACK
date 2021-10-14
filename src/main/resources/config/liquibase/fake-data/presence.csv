@@ -1,3 +1,4 @@
 id;is_attending;app_user_id;booking_id
 1;true;3;1
-2;false;4;1
+2;false;4;2
+3;true;3;11
