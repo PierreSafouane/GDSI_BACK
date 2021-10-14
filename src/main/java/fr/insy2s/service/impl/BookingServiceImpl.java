@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -63,4 +64,10 @@ public class BookingServiceImpl implements BookingService {
         log.debug("Request to delete Booking : {}", id);
         bookingRepository.deleteById(id);
     }
+
+    @Override
+    public List<Booking> findBookingsByIdUser(List<Long> id) {
+        return bookingRepository.findBookingByIdIn(id);
+    }
+
 }

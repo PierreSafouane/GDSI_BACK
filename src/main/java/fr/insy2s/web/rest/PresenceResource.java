@@ -1,6 +1,10 @@
 package fr.insy2s.web.rest;
 
+import fr.insy2s.domain.Booking;
+import fr.insy2s.domain.User;
 import fr.insy2s.service.PresenceService;
+import fr.insy2s.service.dto.BookingDTO;
+import fr.insy2s.service.dto.UserDTO;
 import fr.insy2s.web.rest.errors.BadRequestAlertException;
 import fr.insy2s.service.dto.PresenceDTO;
 
@@ -113,5 +117,23 @@ public class PresenceResource {
         log.debug("REST request to delete Presence : {}", id);
         presenceService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+    /**
+     * recuperation des users pour tel booking
+     *
+     */
+    @GetMapping("/presences/userbybooking/{id}")
+    public List<UserDTO> presenceByBooking(@PathVariable Long id) {
+        return presenceService.findUserByBooking(id);
+    }
+
+    /**
+     * recuperation des bookings pour tel user
+     *
+     */
+    @GetMapping("/presences/bookingbyuser/{id}")
+    public List<BookingDTO> presenceByUser(@PathVariable Long id) {
+        return presenceService.findBookingByUser(id);
     }
 }

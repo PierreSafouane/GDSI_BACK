@@ -2,9 +2,13 @@ package fr.insy2s.service;
 
 import fr.insy2s.domain.User;
 
+import fr.insy2s.service.dto.BookingDTO;
 import io.github.jhipster.config.JHipsterProperties;
 
 import java.nio.charset.StandardCharsets;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Locale;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -33,6 +37,18 @@ public class MailService {
     private static final String USER = "user";
 
     private static final String BASE_URL = "baseUrl";
+
+    private static final String USER_HOST = "userHost";
+
+    private static final String USER_GUEST = "userGuest";
+
+    private static final String BOOKING = "booking";
+
+    private static final String BOOKING_DAY = "day";
+
+    private static final String BOOKING_START = "startAt";
+
+    private static final String BOOKING_END = "finishAt";
 
     private final JHipsterProperties jHipsterProperties;
 
@@ -102,5 +118,33 @@ public class MailService {
     public void sendPasswordResetMail(User user) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
+    }
+
+    @Async
+    public void sendEmailInvitation(User userHost, User userGuest, BookingDTO reservation) {
+        if (userGuest.getEmail() == null) {
+            log.debug("Email doesn't exist for user '{}'", userGuest.getLogin());
+            return;
+        }
+
+        DateTimeFormatter dayFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.FRANCE).withZone(ZoneId.systemDefault());
+        DateTimeFormatter hourFormatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(Locale.FRANCE).withZone(ZoneId.systemDefault());
+
+        String day = dayFormatter.format(reservation.getStartAt());
+        String startHour = hourFormatter.format(reservation.getStartAt());
+        String finishHour = hourFormatter.format(reservation.getFinishAt());
+
+        Locale locale = Locale.forLanguageTag(userGuest.getLangKey());
+        Context context = new Context(locale);
+        context.setVariable(USER_HOST, userHost);
+        context.setVariable(USER_GUEST, userGuest);
+        context.setVariable(BOOKING, reservation);
+        context.setVariable(BOOKING_DAY, day);
+        context.setVariable(BOOKING_START, startHour);
+        context.setVariable(BOOKING_END, finishHour);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        String content = templateEngine.process("mail/InvitationEmail", context);
+        String subject = messageSource.getMessage("email.invitation.title", null, locale);
+        sendEmail(userGuest.getEmail(), subject, content, false, true);
     }
 }
